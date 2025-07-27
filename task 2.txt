@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Awesome E-commerce Store</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>My E-commerce Store</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon" onclick="toggleCart()">
+            🛒 <span id="cart-count">0</span>
+        </div>
+    </header>
+
+    <main>
+        <section id="products">
+            <h2>Our Products</h2>
+            <div class="product-grid">
+                </div>
+        </section>
+    </main>
+
+    <div id="cart-sidebar" class="cart-sidebar">
+        <h2>Your Cart</h2>
+        <div id="cart-items">
+            <p class="empty-cart-message">Your cart is empty.</p>
+        </div>
+        <div class="cart-summary">
+            <p>Subtotal: $<span id="cart-total">0.00</span></p>
+            <button class="checkout-btn">Proceed to Checkout</button>
+        </div>
+        <button class="close-cart" onclick="toggleCart()">X</button>
+    </div>  
+
+    <footer>
+        <p>&copy; 2025 My E-commerce Store. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+css
+
+
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Header */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+header h1 {
+    margin: 0;
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+header nav ul li {
+    margin-left: 20px;
+}
+
+header nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+header nav ul li a:hover {
+    color: #ffd700;
+}
+
+.cart-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: relative;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: #555;
+}
+
+#cart-count {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    font-size: 0.8rem;
+}
+
+/* Main Content */
+main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 20px auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+#products h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #007bff;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+}
+
+.product-card img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+    border-radius: 4px;
+}
+
+.product-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.product-card p {
+    font-size: 0.9rem;
+    color: #666;
+    flex-grow: 1; /* Allows description to take available space */
+}
+
+.product-card .price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #28a745;
+    margin-top: 1rem;
+}
+
+.product-card button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.product-card button:hover {
+    background-color: #0056b3;
+}
+
+/* Cart Sidebar */
+.cart-sidebar {
+    position: fixed;
+    top: 0;
+    right: -350px; /* Initially hidden */
+    width: 350px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-sidebar.open {
+    right: 0;
+}
+
+.cart-sidebar h2 {
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    margin-top: 0;
+    color: #007bff;
+}
+
+#cart-items {
+    flex-grow: 1;
+    padding: 1rem;
+    overflow-y: auto;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 1rem;
+}
+
+.cart-item img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    margin-right: 1rem;
+    border-radius: 4px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-details h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+}
+
+.cart-item-details .price {
+    font-size: 0.9rem;
+    color: #28a745;
+    font-weight: bold;
+}
+
+.cart-item .remove-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.cart-item .remove-btn:hover {
+    background-color: #c82333;
+}
+
+.empty-cart-message {
+    text-align: center;
+    color: #888;
+    margin-top: 2rem;
+}
+
+.cart-summary {
+    padding: 1rem;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.cart-summary p {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.checkout-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 100%;
+    transition: background-color 0.3s ease;
+}
+
+.checkout-btn:hover {
+    background-color: #218838;
+}
+
+.close-cart {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #333;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #333;
+    color: #fff;
+    margin-top: 2rem;
+}
+
+
+
+
+js
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const productsContainer = document.querySelector('.product-grid');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartTotalSpan = document.getElementById('cart-total');
+    const cartCountSpan = document.getElementById('cart-count');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const emptyCartMessage = document.querySelector('.empty-cart-message');
+
+    let cart = []; // Array to store cart items
+
+    // Sample Products with Image URLs
+    const products = [
+        {
+            id: 1,
+            name: 'Stylish T-Shirt',
+            image: 'tshirt.jpg', // Replace with your image path/URL
+            price: 19.99,
+            description: 'A comfortable and stylish cotton t-shirt for everyday wear.'
+        },
+        {
+            id: 2,
+            name: 'Wireless Headphones',
+            image: 'headphones.jpg', // Replace with your image path/URL
+            price: 79.99,
+            description: 'Immersive sound experience with noise-cancelling technology.'
+        },
+        {
+            id: 3,
+            name: 'Smartwatch Pro',
+            image: 'smartwatch.jpg', // Replace with your image path/URL
+            price: 149.00,
+            description: 'Track your fitness, receive notifications, and stay connected.'
+        },
+        {
+            id: 4,
+            name: 'Designer Backpack',
+            image: 'backpack.jpg', // Replace with your image path/URL
+            price: 49.50,
+            description: 'Durable and spacious backpack for your daily commute or travel.'
+        },
+        {
+            id: 5,
+            name: 'Gaming Mouse',
+            image: 'mouse.jpg', // Replace with your image path/URL
+            price: 35.00,
+            description: 'Precision gaming mouse with customizable RGB lighting.'
+        },
+        {
+            id: 6,
+            name: 'Portable Speaker',
+            image: 'speaker.jpg', // Replace with your image path/URL
+            price: 29.99,
+            description: 'Compact and powerful speaker for on-the-go music.'
+        }
+    ];
+
+    // Function to render products on the page
+    function renderProducts() {
+        productsContainer.innerHTML = ''; // Clear existing products
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.classList.add('product-card');
+            productCard.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <div class="price">$${product.price.toFixed(2)}</div>
+                <button onclick="addToCart(${product.id})">Add to Cart</button>
+            `;
+            productsContainer.appendChild(productCard);
+        });
+    }
+
+    // Function to add a product to the cart
+    window.addToCart = (productId) => {
+        const productToAdd = products.find(product => product.id === productId);
+        if (productToAdd) {
+            const existingCartItem = cart.find(item => item.id === productId);
+            if (existingCartItem) {
+                existingCartItem.quantity++;
+            } else {
+                cart.push({ ...productToAdd, quantity: 1 });
+            }
+            updateCart();
+            toggleCart(true); // Open cart sidebar when item is added
+        }
+    };
+
+    // Function to remove a product from the cart
+    window.removeFromCart = (productId) => {
+        cart = cart.filter(item => item.id !== productId);
+        updateCart();
+    };
+
+    // Function to update the cart display and total
+    function updateCart() {
+        cartItemsContainer.innerHTML = ''; // Clear existing cart items
+        let total = 0;
+
+        if (cart.length === 0) {
+            emptyCartMessage.style.display = 'block';
+        } else {
+            emptyCartMessage.style.display = 'none';
+            cart.forEach(item => {
+                const cartItemDiv = document.createElement('div');
+                cartItemDiv.classList.add('cart-item');
+                cartItemDiv.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}">
+                    <div class="cart-item-details">
+                        <h4>${item.name}</h4>
+                        <p>Quantity: ${item.quantity}</p>
+                        <p class="price">$${(item.price * item.quantity).toFixed(2)}</p>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
+                `;
+                cartItemsContainer.appendChild(cartItemDiv);
+                total += item.price * item.quantity;
+            });
+        }
+
+        cartTotalSpan.textContent = total.toFixed(2);
+        cartCountSpan.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    // Function to toggle cart sidebar visibility
+    window.toggleCart = (open) => {
+        if (open !== undefined) {
+            if (open) {
+                cartSidebar.classList.add('open');
+            } else {
+                cartSidebar.classList.remove('open');
+        }
+    } else {
+        cartSidebar.classList.toggle('open');
+    }
+};
+
+    // Initial render of products and cart
+    renderProducts();
+    updateCart(); // Initialize cart display (will show empty)
+});
